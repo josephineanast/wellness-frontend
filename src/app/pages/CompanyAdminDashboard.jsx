@@ -21,7 +21,7 @@ export default function CompanyAdminDashboard({ events, token }) {
           {events.map((event) => (
             <tr key={event.id}>
               <td>{event.name}</td>
-              <td>{event.vendor}</td>
+              <td>{event.vendorName}</td>
               <td>{event.confirmedDate || "Proposed Dates"}</td>
               <td>{event.status}</td>
               <td>{event.created_at}</td>

@@ -17,7 +17,7 @@ function VendorDashboard({ events, token }) {
               </td>
 
               <td>{event.name}</td>
-              <td>{event.vendor}</td>
+              <td>{event.vendorName}</td>
               <td>{event.confirmedDate || "Proposed Dates"}</td>
               <td>{event.status}</td>
               <td>{event.createdAt}</td>

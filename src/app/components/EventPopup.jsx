@@ -43,7 +43,7 @@ export default function EventPopup({ event, onClose, token }) {
     return (
       <div className="popup">
         <h2>{event.name}</h2>
-        <p>Vendor: {event.vendor}</p>
+        <p>Vendor: {event.vendorName}</p>
         <p>Dates: {event.proposedDates.join(", ")}</p>
         <button onClick={onClose}>Close</button>
       </div>
