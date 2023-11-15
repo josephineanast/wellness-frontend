@@ -28,7 +28,7 @@ const ModalContent = styled.div`
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: ${(props) => (props.isVendor ? "center" : "flex-start")};
 `;
 
 const ModalActions = styled.div`
@@ -146,7 +146,7 @@ export default function EventPopup({
       <Modal>
         <ModalTitle>{event.name}</ModalTitle>
 
-        <ModalContent>
+        <ModalContent isVendor={currentUser.role === "vendor"}>
           <p>Choose from 3 proposed dates to approve:</p>
           {event.proposedDates.map((date) => (
             <Button
