@@ -6,6 +6,11 @@ import styled from "styled-components";
 import { loginStart, loginSuccess, loginFailure } from "../features/authSlice";
 import { loginUser } from "../api/auth";
 
+const Title = styled.h3`
+  text-align: center;
+  font-size: 2rem;
+`;
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -14,6 +19,10 @@ const Form = styled.form`
   border-radius: 10px;
   padding: 30px;
   font-family: sans-serif;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const InputLabel = styled.label`
@@ -25,7 +34,8 @@ const Input = styled.input`
   border: 1.5px solid #ecedec;
   border-radius: 10px;
   padding: 10px;
-  width: 80%;
+  width: 100%;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
@@ -34,12 +44,31 @@ const Input = styled.input`
 `;
 
 const PasswordInput = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
+  flex-direction: column;
+`;
+
+const InputWithToggle = styled.input`
+  border: 1.5px solid #ecedec;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border: 1.5px solid #2d79f3;
+  }
 `;
 
 const PasswordToggle = styled.span`
-  margin-left: auto;
+  position: absolute;
+  right: 10px;
+  top: 45%;
+  transform: translateY(-50%);
   color: #2d79f3;
   cursor: pointer;
 `;
@@ -51,7 +80,7 @@ const SubmitButton = styled.button`
   border-radius: 10px;
   padding: 15px;
   cursor: pointer;
-  width: 85%;
+  width: 100%;
 
   &:hover {
     background: #252727;
@@ -82,31 +111,32 @@ export default function Login() {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <InputLabel>Email</InputLabel>
-
-      <Input
-        type="email"
-        placeholder="Enter email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-
-      <InputLabel>Password</InputLabel>
-
-      <PasswordInput>
+    <>
+      <Title>Log in to your account</Title>
+      <Form onSubmit={handleSubmit}>
+        <InputLabel>Email</InputLabel>
         <Input
-          type={showPassword ? "text" : "password"}
-          placeholder="Enter password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          type="email"
+          placeholder="Enter email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-        <PasswordToggle onClick={() => setShowPassword(!showPassword)}>
-          {showPassword ? "Hide" : "Show"}
-        </PasswordToggle>
-      </PasswordInput>
 
-      <SubmitButton type="submit">Sign In</SubmitButton>
-    </Form>
+        <InputLabel>Password</InputLabel>
+        <PasswordInput>
+          <InputWithToggle
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <PasswordToggle onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? "Hide" : "Show"}
+          </PasswordToggle>
+        </PasswordInput>
+
+        <SubmitButton type="submit">Sign In</SubmitButton>
+      </Form>
+    </>
   );
 }
