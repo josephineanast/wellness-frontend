@@ -7,12 +7,12 @@ const getRequestConfig = (token) => ({
   },
 });
 
-export const createEvent = async (eventData) => {
+export const createEvent = async (eventData, token) => {
   try {
     const response = await axios.post(
       `${config.apiHost}/api/events/create`,
       eventData,
-      getRequestConfig(eventData.token)
+      getRequestConfig(token)
     );
     return response.data;
   } catch (error) {

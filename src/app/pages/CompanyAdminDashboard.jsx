@@ -1,7 +1,9 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import EventPopup from "../components/EventPopup";
-
+import { createEventAction } from "../features/eventSlice";
+import { useDispatch } from "react-redux";
+import EventForm from "../components/EventForm";
 import styled from "styled-components";
 
 const Dashboard = styled.div`
@@ -52,12 +54,68 @@ const Button = styled.button`
   }
 `;
 
-export default function CompanyAdminDashboard({ events, token }) {
+const ModalContainer = styled.div`
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+`;
+
+const CreateEventBtn = styled.button`
+  background: blue;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 8px;
+  margin-bottom: 18px;
+
+  &:hover {
+    background: darkblue;
+  }
+`;
+
+export default function CompanyAdminDashboard({ events, token, userId }) {
   CompanyAdminDashboard.propTypes = {
-    events: PropTypes.array.isRequired,
+    events: PropTypes.array,
     token: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
   };
+
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleCreateEvent = async (eventData, token, event) => {
+    event.preventDefault();
+    try {
+      dispatch(createEventAction(eventData, token));
+      setIsCreateEventModalOpen(false);
+    } catch (error) {
+      throw new Error(
+        `Failed to create new event: ${error.response.data.message}`
+      );
+    }
+  };
+
+  const openCreateEventModal = () => {
+    setIsCreateEventModalOpen(true);
+  };
 
   const handleViewEvent = (event) => {
     setSelectedEvent(event);
@@ -102,6 +160,21 @@ export default function CompanyAdminDashboard({ events, token }) {
   return (
     <Dashboard>
       <Header>Company Admin Dashboard</Header>
+      <CreateEventBtn onClick={openCreateEventModal}>
+        Create Event
+      </CreateEventBtn>
+      <ModalContainer isOpen={isCreateEventModalOpen}>
+        <ModalContent onClick={(e) => e.stopPropagation()}>
+          {isCreateEventModalOpen && (
+            <EventForm
+              token={token}
+              userId={userId}
+              onClose={() => setIsCreateEventModalOpen(null)}
+              onSubmit={handleCreateEvent}
+            />
+          )}
+        </ModalContent>
+      </ModalContainer>
 
       <Table>
         <TableHead>
@@ -116,7 +189,7 @@ export default function CompanyAdminDashboard({ events, token }) {
         </TableHead>
 
         <tbody>
-          {events.map((event) => (
+          {events?.map((event) => (
             <TableRow key={event.id}>
               <TableCell>{event.name}</TableCell>
               <TableCell>{event.vendorName}</TableCell>
