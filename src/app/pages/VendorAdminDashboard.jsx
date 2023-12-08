@@ -1,7 +1,6 @@
 import EventPopup from "../components/EventPopup";
 import { useState } from "react";
 import PropTypes from "prop-types";
-
 import styled from "styled-components";
 
 const Dashboard = styled.div`
@@ -108,7 +107,7 @@ function VendorDashboard({ events, token }) {
         </TableHead>
 
         <tbody>
-          {events.map((event) => (
+          {events?.map((event) => (
             <TableRow key={event.id}>
               <TableCell>{event.name}</TableCell>
               <TableCell>{event.vendorName}</TableCell>
@@ -141,7 +140,7 @@ function VendorDashboard({ events, token }) {
 }
 
 VendorDashboard.propTypes = {
-  events: PropTypes.array.isRequired,
+  events: PropTypes.array,
   token: PropTypes.string.isRequired,
 };
 

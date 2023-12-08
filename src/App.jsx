@@ -7,6 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Login from "../src/app/pages/login";
+import Register from "./app/pages/Register";
 import CompanyAdminDashboard from "../src/app/pages/CompanyAdminDashboard";
 import VendorAdminDashboard from "../src/app/pages/VendorAdminDashboard";
 import { useDispatch, useSelector } from "react-redux";
@@ -44,12 +45,17 @@ function App() {
           }
         />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/company-admin"
           element={
             auth.user ? (
               userRole === "company" ? (
-                <CompanyAdminDashboard events={events} token={auth.token} />
+                <CompanyAdminDashboard
+                  events={events}
+                  token={auth.token}
+                  userId={auth.user._id}
+                />
               ) : (
                 <Navigate to="/login" replace />
               )

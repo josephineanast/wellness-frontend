@@ -3,8 +3,12 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { loginStart, loginFailure, loginSuccess } from "../features/authslice";
-import { loginUser } from "../api/auth";
+import {
+  registerStart,
+  registerFailure,
+  registerSuccess,
+} from "../features/authslice";
+import { registerUser } from "../api/auth";
 
 const Title = styled.h3`
   text-align: center;
@@ -73,6 +77,10 @@ const PasswordToggle = styled.span`
   cursor: pointer;
 `;
 
+const Select = styled.select`
+  // Styles for your select
+`;
+
 const SubmitButton = styled.button`
   border: none;
   color: white;
@@ -87,15 +95,17 @@ const SubmitButton = styled.button`
   }
 `;
 
-const RegisterLink = styled.p`
+const LoginLink = styled.p`
   text-align: center;
   margin-top: 10px;
   font-size: 0.8rem;
 `;
 
-export default function Login() {
+export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("company");
   const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
@@ -104,22 +114,34 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch(loginStart());
+    dispatch(registerStart());
 
     try {
-      const user = await loginUser({ email, password });
-      dispatch(loginSuccess(user));
-      const userRole = user.user.role;
-      navigate(`/${userRole}-admin`);
+      const user = await registerUser({
+        name: name,
+        email: email,
+        password: password,
+        role: role,
+      });
+      dispatch(registerSuccess({ user }));
+      navigate(`/login`);
     } catch (err) {
-      dispatch(loginFailure(err.message));
+      dispatch(registerFailure(err.message));
     }
   };
 
   return (
     <>
-      <Title>Log in to your account</Title>
+      <Title>Create an account</Title>
       <Form onSubmit={handleSubmit}>
+        <InputLabel>Name</InputLabel>
+        <Input
+          type="text"
+          placeholder="Enter your name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
         <InputLabel>Email</InputLabel>
         <Input
           type="email"
@@ -141,10 +163,16 @@ export default function Login() {
           </PasswordToggle>
         </PasswordInput>
 
-        <SubmitButton type="submit">Sign In</SubmitButton>
-        <RegisterLink>
-          No account? <Link to="/register">Register here</Link>
-        </RegisterLink>
+        <InputLabel>Role</InputLabel>
+        <Select value={role} onChange={(e) => setRole(e.target.value)}>
+          <option value="company">Company</option>
+          <option value="vendor">Vendor</option>
+        </Select>
+
+        <SubmitButton type="submit">Register</SubmitButton>
+        <LoginLink>
+          Already have an account? <Link to="/login">Login here</Link>
+        </LoginLink>
       </Form>
     </>
   );

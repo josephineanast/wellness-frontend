@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getMyEvents } from "../api/event";
+import { createEvent } from "../api/event";
 
 const initialState = {
   events: [],
@@ -22,11 +23,28 @@ const eventSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    createEventStart(state) {
+      state.loading = true;
+    },
+    createEventSuccess(state, action) {
+      state.loading = false;
+      state.events.push(action.payload);
+    },
+    createEventFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
-export const { getEventsStart, getEventsSuccess, getEventsFailure } =
-  eventSlice.actions;
+export const {
+  getEventsStart,
+  getEventsSuccess,
+  getEventsFailure,
+  createEventStart,
+  createEventSuccess,
+  createEventFailure,
+} = eventSlice.actions;
 
 export const fetchEvents = (token) => async (dispatch) => {
   try {
@@ -35,6 +53,16 @@ export const fetchEvents = (token) => async (dispatch) => {
     dispatch(getEventsSuccess(response));
   } catch (error) {
     dispatch(getEventsFailure(error.message));
+  }
+};
+
+export const createEventAction = (eventData, token) => async (dispatch) => {
+  try {
+    dispatch(createEventStart());
+    const response = await createEvent(eventData, token);
+    dispatch(createEventSuccess(response));
+  } catch (error) {
+    dispatch(createEventFailure(error.message));
   }
 };
 
