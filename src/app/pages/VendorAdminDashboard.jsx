@@ -2,6 +2,7 @@ import EventPopup from "../components/EventPopup";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { SideDashboardComponent } from "../components/SideDashboard";
 
 const Dashboard = styled.div`
   max-width: 800px;
@@ -39,7 +40,7 @@ const TableHeadCell = styled(TableCell)`
 `;
 
 const Button = styled.button`
-  background: blue;
+  background: #7e30e1;
   color: white;
   border: none;
   padding: 6px 10px;
@@ -47,11 +48,11 @@ const Button = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: darkblue;
+    background: #49108b;
   }
 `;
 
-function VendorDashboard({ events, token }) {
+function VendorDashboard({ events, token, name }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   function formatDate(isoDateString) {
@@ -92,6 +93,7 @@ function VendorDashboard({ events, token }) {
 
   return (
     <Dashboard>
+      <SideDashboardComponent name={name} />
       <Header>Vendor Dashboard</Header>
 
       <Table>
@@ -142,6 +144,7 @@ function VendorDashboard({ events, token }) {
 VendorDashboard.propTypes = {
   events: PropTypes.array,
   token: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 export default VendorDashboard;

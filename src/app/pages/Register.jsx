@@ -23,7 +23,6 @@ const Form = styled.form`
   border-radius: 10px;
   padding: 30px;
   font-family: sans-serif;
-
   @media (max-width: 768px) {
     width: 100%;
   }
@@ -78,7 +77,10 @@ const PasswordToggle = styled.span`
 `;
 
 const Select = styled.select`
-  // Styles for your select
+  padding: 5px;
+  border-radius: 4px;
+  border: 1.5px solid #ecedec;
+  margin-bottom: 16px;
 `;
 
 const SubmitButton = styled.button`

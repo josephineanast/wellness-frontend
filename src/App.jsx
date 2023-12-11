@@ -55,6 +55,7 @@ function App() {
                   events={events}
                   token={auth.token}
                   userId={auth.user._id}
+                  name={auth.user.name}
                 />
               ) : (
                 <Navigate to="/login" replace />
@@ -69,7 +70,11 @@ function App() {
           element={
             auth.user ? (
               userRole === "vendor" ? (
-                <VendorAdminDashboard events={events} token={auth.token} />
+                <VendorAdminDashboard
+                  events={events}
+                  token={auth.token}
+                  name={auth.user.name}
+                />
               ) : (
                 <Navigate to="/login" replace />
               )

@@ -5,6 +5,7 @@ import { createEventAction } from "../features/eventSlice";
 import { useDispatch } from "react-redux";
 import EventForm from "../components/EventForm";
 import styled from "styled-components";
+import { SideDashboardComponent } from "../components/SideDashboard";
 
 const Dashboard = styled.div`
   max-width: 800px;
@@ -42,7 +43,7 @@ const TableHeadCell = styled(TableCell)`
 `;
 
 const Button = styled.button`
-  background: blue;
+  background: #7e30e1;
   color: white;
   border: none;
   padding: 6px 10px;
@@ -50,7 +51,7 @@ const Button = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: darkblue;
+    background: #49108b;
   }
 `;
 
@@ -76,7 +77,7 @@ const ModalContent = styled.div`
 `;
 
 const CreateEventBtn = styled.button`
-  background: blue;
+  background: #49108b;
   color: white;
   border: none;
   padding: 6px 10px;
@@ -86,15 +87,16 @@ const CreateEventBtn = styled.button`
   margin-bottom: 18px;
 
   &:hover {
-    background: darkblue;
+    background: #7e30e1;
   }
 `;
 
-export default function CompanyAdminDashboard({ events, token, userId }) {
+export default function CompanyAdminDashboard({ events, token, userId, name }) {
   CompanyAdminDashboard.propTypes = {
     events: PropTypes.array,
     token: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
   };
 
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -159,6 +161,7 @@ export default function CompanyAdminDashboard({ events, token, userId }) {
 
   return (
     <Dashboard>
+      <SideDashboardComponent name={name} />
       <Header>Company Admin Dashboard</Header>
       <CreateEventBtn onClick={openCreateEventModal}>
         Create Event
